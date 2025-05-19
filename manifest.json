@@ -2,7 +2,7 @@
   "name" : "EMI Calculator Loan And App",
   "short_name" : "EMICalculatorLoanApp",
   "scope" : "/",
-  "start_url" : "/",
+  "start_url" : "/start.html",
   "display" : "standalone",
   "background_color" : "#FFFFFF",
   "theme_color" : "#FFFFFF",
