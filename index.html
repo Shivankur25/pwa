@@ -440,24 +440,7 @@
     else topBar.classList.remove("scrolled");
   });
 </script>
-<script>
-  (function() {
-    const isChrome =
-            /Chrome/.test(navigator.userAgent) &&
-            /Google Inc/.test(navigator.vendor);
-    const supportsSW = 'serviceWorker' in navigator;
-    const supportsPush = 'PushManager' in window;
-    const supportsNotif = 'Notification' in window;
 
-    if (isChrome && supportsSW && supportsPush && supportsNotif) {
-      document.documentElement.classList.add('show-app');
-    } else {
-      document.documentElement.classList.add('show-unsupported');
-      // Optional: Redirect fallback
-      window.location.href = 'https://shivankur25.github.io/pwa/';
-    }
-  })();
-</script>
 
 
 <!-- Your external app.js (e.g. additional logic) -->
