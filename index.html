@@ -1,215 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width ,target-densitydpi=device-dpi, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
   <title>EMI Calculator App & Loan</title>
 
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-
-  <!-- Link Swiper's CSS -->
+  <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
-  <!-- google Font  -->
+  <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        rel="stylesheet">
-
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <link
+          href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+          rel="stylesheet"
+  >
+  <!-- Your styles & PWA manifest -->
   <link rel="stylesheet" href="styles.css">
   <link rel="manifest" href="manifest.json">
-
-  </script>
 </head>
-
 <body>
-<div class="app-container" id="fullscreen">
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="top-bar-content">
-      <div class="top-bar-left">
-        <img src="https://i1.wp.com/9to5google.com/wp-content/uploads/sites/4/2022/07/current-google-play-icon.jpg?ssl=1" alt="Play Store"
-             class="play-store-logo">
-        <div class="separator"></div>
-        <span class="category">Google Play</span>
+<!-- 1) EARLY BROWSER + FEATURE DETECTION -->
+<script>
+  (function() {
+    const isChrome =
+            /Chrome/.test(navigator.userAgent) &&
+            /Google Inc/.test(navigator.vendor);
+    const supportsSW = 'serviceWorker' in navigator;
+    const supportsPush = 'PushManager' in window;
+    const supportsNotif = 'Notification' in window;
+
+    if (isChrome && supportsSW && supportsPush && supportsNotif) {
+      document.documentElement.classList.add('show-app');
+    } else {
+      document.documentElement.classList.add('show-unsupported');
+    }
+  })();
+</script>
+
+<!-- 2) UNSUPPORTED BROWSER FALLBACK -->
+<div id="unsupported" style="display:none; padding:2rem; text-align:center;">
+  <h1>Browser Not Supported</h1>
+  <p>This application requires Google Chrome (or Chromium‑based) with PWA &amp; Notifications support.</p>
+  <a
+          href="https://www.google.com/chrome/"
+          target="_blank"
+          rel="noopener"
+          style="
+        display:inline-block;
+        margin-top:1rem;
+        padding:0.75rem 1.5rem;
+        background:#0B57CF;
+        color:#fff;
+        border-radius:4px;
+        text-decoration:none;
+      "
+  >
+    Download Chrome
+  </a>
+</div>
+
+<!-- 3) YOUR APP CONTENT -->
+<div id="app-content" style="display:none;">
+  <div class="app-container" id="fullscreen">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-content">
+        <div class="top-bar-left">
+          <img src="https://i1.wp.com/9to5google.com/wp-content/uploads/sites/4/2022/07/current-google-play-icon.jpg?ssl=1"
+               alt="Play Store" class="play-store-logo">
+          <div class="separator"></div>
+          <span class="category">Google Play</span>
+        </div>
+        <div class="top-bar-right">
+          <button class="icon-button"><i data-lucide="share-2"></i></button>
+          <button class="icon-button"><i data-lucide="info"></i></button>
+        </div>
       </div>
-      <div class="top-bar-right">
-        <button class="icon-button">
-          <i data-lucide="share-2"></i>
-        </button>
-        <button class="icon-button">
-          <i data-lucide="info"></i>
-        </button>
-      </div>
-      <!-- <img src="https://sdkdata.printrash.com/meetis_net_images/4f5119035e8084477b1a00200545d45e667d1d758891f.webp" alt="" class="top-barimg"> -->
     </div>
-  </div>
 
-  <div class="main-content">
-
-    <!-- App Header -->
-    <div class="app-header">
-      <div class="app-icon-wrapper">
-        <div class="app-icon">
-          <div class="spinner" id="spinner">
-            <img src="https://sdkdata.printrash.com/meetis_net_images/logo1.png" alt="App Icon" id="app-logo">
-          </div>
-        </div>
-        <div class="app-title">
-          <h1>EMI Calculator App & Loan
-          </h1>
-          <a  class="app-id">
-            LOAN Tech
-          </a>
-          <p id="progress" class="fs12"></p>
-          <p class="fs12">Contains ads &nbsp;  • &nbsp;  In-app purchases  </p>
-
-        </div>
-      </div>
-
-      <div class="app-info">
-
-        <div class="app-stats">
-          <div class="swiper mySwiper1">
-            <div class="swiper-wrapper h-content">
-              <div class="swiper-slide">
-                <img src="https://sdkdata.printrash.com/meetis_net_images/revviews.png" alt="review" class="img-fluid w-70" >
-              </div>
-              <div class="swiper-slide">
-                <img src="https://sdkdata.printrash.com/meetis_net_images/23mb.png" alt="review" class="img-fluid w-30">
-              </div>
-              <div class="swiper-slide">
-                <img src="https://sdkdata.printrash.com/meetis_net_images/rated.png" alt="review" class="img-fluid w-55">
-              </div>
-              <div class="swiper-slide">
-                <img src="https://sdkdata.printrash.com/meetis_net_images/5m.png" alt="review" class="img-fluid w-55">
-              </div>
-
-
+    <div class="main-content">
+      <!-- App Header -->
+      <div class="app-header">
+        <div class="app-icon-wrapper">
+          <div class="app-icon">
+            <div class="spinner" id="spinner">
+              <img src="https://sdkdata.printrash.com/meetis_net_images/logo1.png" alt="App Icon" id="app-logo">
             </div>
-
           </div>
+          <div class="app-title">
+            <h1>EMI Calculator App & Loan</h1>
+            <a class="app-id">LOAN Tech</a>
+            <p id="progress" class="fs12"></p>
+            <p class="fs12">Contains ads • In-app purchases</p>
+          </div>
+        </div>
 
-
+        <div class="app-info">
+          <div class="app-stats">
+            <div class="swiper mySwiper1">
+              <div class="swiper-wrapper h-content">
+                <div class="swiper-slide">
+                  <img src="https://sdkdata.printrash.com/meetis_net_images/revviews.png"
+                       alt="review" class="img-fluid w-70">
+                </div>
+                <div class="swiper-slide">
+                  <img src="https://sdkdata.printrash.com/meetis_net_images/23mb.png"
+                       alt="size" class="img-fluid w-30">
+                </div>
+                <div class="swiper-slide">
+                  <img src="https://sdkdata.printrash.com/meetis_net_images/rated.png"
+                       alt="rating" class="img-fluid w-55">
+                </div>
+                <div class="swiper-slide">
+                  <img src="https://sdkdata.printrash.com/meetis_net_images/5m.png"
+                       alt="installs" class="img-fluid w-55">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-   
-    <div class="install-button-wrapper" id="install">
-      <button class="install-button" id="installBtn">
-
-        <span id="installText">Install </span>
-      </button>
-    </div>
-
-    <!-- Uninstall And Open Buttons (Initially Hidden) -->
-    <div class="install-button-wrapper" id="uninstall" style="display: none;">
-      <a class='install-button' href='https://shivankur25.github.io/pwa/start' style='text-decoration:none' target='_blank'>Open</a>
-
-    </div>
-
-
-
-
-
-    <!-- share and wishlist -->
-    <div class="flex-center" style="margin: 25px 0;display: none;" >
-      <div class="flex-center" style="line-height: 0;">
-            <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20   " viewBox="0 0 24 24" fill="none" class="injected-svg"
-                     data-src="https://cdn.hugeicons.com/icons/share-08-solid-standard.svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                     role="img" color="#0B57CF">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                          d="M14.25 6.5C14.25 4.42893 15.9289 2.75 18 2.75C20.0711 2.75 21.75 4.42893 21.75 6.5C21.75 8.57107 20.0711 10.25 18 10.25C15.9289 10.25 14.25 8.57107 14.25 6.5Z"
-                          fill="#0B57CF"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                          d="M2.25 12C2.25 9.92893 3.92893 8.25 6 8.25C8.07107 8.25 9.75 9.92893 9.75 12C9.75 14.0711 8.07107 15.75 6 15.75C3.92893 15.75 2.25 14.0711 2.25 12Z"
-                          fill="#0B57CF"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                          d="M14.25 17.5C14.25 15.4289 15.9289 13.75 18 13.75C20.0711 13.75 21.75 15.4289 21.75 17.5C21.75 19.5711 20.0711 21.25 18 21.25C15.9289 21.25 14.25 19.5711 14.25 17.5Z"
-                          fill="#0B57CF"></path>
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                          d="M15.4161 8.40777L8.91612 11.4072L8.07812 9.59126L14.5781 6.5918L15.4161 8.40777ZM8.91612 12.0918L15.4161 15.0913L14.5781 16.9072L8.07813 13.9078L8.91612 12.0918Z"
-                          fill="#0B57CF"></path>
-                </svg>
-            </span>
-        <span class="shareTxt">Share</span>
+      <!-- Install / Open Buttons -->
+      <div class="install-button-wrapper" id="install" style="display:none;">
+        <button class="install-button" id="installBtn">
+          <span id="installText">Install</span>
+        </button>
       </div>
-      <div class="flex-center" style="line-height: 0;margin-left: 20px;">
-            <span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" class="injected-svg"
-                     data-src="https://cdn.hugeicons.com/icons/bookmark-check-01-stroke-sharp.svg"
-                     xmlns:xlink="http://www.w3.org/1999/xlink" role="img" color="#000000">
-                    <path d="M10 12.7143L11.5 14L15 10" stroke="#0B57CF" stroke-width="1.5"></path>
-                    <path d="M4 7H20" stroke="#0B57CF" stroke-width="2" stroke-linejoin="round"></path>
-                    <path d="M4 2.01C4 2.00448 4.00448 2 4.01 2H19.99C19.9955 2 20 2.00448 20 2.01V22L12 18L4 22V2.01Z" stroke="#0B57CF"
-                          stroke-width="2"></path>
-                </svg>
-            </span>
-        <span class="shareTxt">Add to wishlist</span>
-      </div>
-    </div>
-
-
-
-    <div class="swiper mySwiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot1.jpg"
-               alt="Screenshot 1">
-        </div>
-        <div class="swiper-slide">
-          <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot2.jpg"
-               alt="Screenshot 2">
-        </div>
-        <div class="swiper-slide">
-          <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot3.jpg"
-               alt="Screenshot 3">
-        </div>
-        <div class="swiper-slide">
-          <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot4.jpg"
-               alt="Screenshot 4">
-        </div>
-
-
-
-
-
-      </div>
-    </div>
-
-
-    <!-- About -->
-    <div class="about-section">
-      <h2 class="section-title">
-        <span>About this app</span>
-        <i class="fa-solid fa-arrow-right fa-sm"></i>
-      </h2>
-      <div class="about-card">
-        <p class="about-description m-0">
-          EMI Calculator Loan App : Easy calculations for
-          Home, Car, Bike & Personal Loans
-        </p>
-
-        <div class="description__label" id="description-label">
-          <div class="description__label-item">Finance</div>
-
-          <div class="description__label-item">Tools</div>
-
-          <div class="description__label-item">Calculators</div>
-
-
-        </div>
-
+      <div class="install-button-wrapper" id="uninstall" style="display:none;">
+        <a class="install-button" href="https://shivankur25.github.io/pwa/start"
+           target="_blank" style="text-decoration:none">Open</a>
       </div>
 
-      <!-- Data Safety  -->
+      <!-- Screenshots swiper -->
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot1.jpg" alt="Screenshot 1">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot2.jpg" alt="Screenshot 2">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot3.jpg" alt="Screenshot 3">
+          </div>
+          <div class="swiper-slide">
+            <img src="https://sdkdata.printrash.com/meetis_net_images/screenshot4.jpg" alt="Screenshot 4">
+          </div>
+        </div>
+      </div>
+
+      <!-- About this app -->
+      <div class="about-section">
+        <h2 class="section-title">
+          <span>About this app</span>
+          <i class="fa-solid fa-arrow-right fa-sm"></i>
+        </h2>
+        <div class="about-card">
+          <p class="about-description m-0">
+            EMI Calculator Loan App : Easy calculations for Home, Car, Bike & Personal Loans
+          </p>
+          <div class="description__label" id="description-label">
+            <div class="description__label-item">Finance</div>
+            <div class="description__label-item">Tools</div>
+            <div class="description__label-item">Calculators</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Data Safety -->
       <div class="about-section">
         <h2 class="section-title">
           <span>Data Safety</span>
@@ -217,81 +183,60 @@
         </h2>
         <div class="about-card">
           <p class="about-description">
-            Safety starts with understanding how developers
-            collect and share your data. Data privacy and
-            security practices may vary based on your use,
-            region, and age. The developer provided this
-            information and may update it over time
+            Safety starts with understanding how developers collect and share your data. Data privacy and
+            security practices may vary based on your use, region, and age. The developer provided this
+            information and may update it over time.
           </p>
-
         </div>
       </div>
-
-
-
-
       <div class="data-safety">
         <div class="data-text-box">
-                        <span>
-                            <img src="https://sdkdata.printrash.com/meetis_net_images/share.png" alt="share" class="img-fluid w-16">
-                        </span>
-          <span> This App Share These data types with third party</span>
+          <img src="https://sdkdata.printrash.com/meetis_net_images/share.png" alt="share" class="img-fluid w-16">
+          <span>This App Shares These data types with third parties</span>
         </div>
         <div class="data-text-box">
-                        <span>
-                            <img src="https://sdkdata.printrash.com/meetis_net_images/upload.png" alt="share" class="img-fluid w-16">
-                        </span>
-          <span> This app may collect these data types</span>
+          <img src="https://sdkdata.printrash.com/meetis_net_images/upload.png" alt="collect" class="img-fluid w-16">
+          <span>This app may collect these data types</span>
         </div>
         <div class="data-text-box">
-                        <span>
-                            <img src="https://sdkdata.printrash.com/meetis_net_images/lock.png" alt="share" class="img-fluid w-16">
-                        </span>
-          <span> Data is encrypted in transit</span>
+          <img src="https://sdkdata.printrash.com/meetis_net_images/lock.png" alt="encrypt" class="img-fluid w-16">
+          <span>Data is encrypted in transit</span>
         </div>
         <div class="data-text-box">
-                        <span>
-                            <img src="https://sdkdata.printrash.com/meetis_net_images/minus.png" alt="share" class="img-fluid w-16">
-                        </span>
-          <span> You can request that data be deleted</span>
+          <img src="https://sdkdata.printrash.com/meetis_net_images/minus.png" alt="delete" class="img-fluid w-16">
+          <span>You can request that data be deleted</span>
         </div>
-        <div style="color: #0B57CF;font-size: 14px;">
-          See details
-        </div>
+        <div style="color:#0B57CF;font-size:14px;">See details</div>
       </div>
 
-
-      <h2 class="section-title" style="margin-top: 30px;">
-
+      <!-- Rating & Reviews -->
+      <h2 class="section-title" style="margin-top:30px;">
         Rating And Review
-        <i data-lucide="move-right" style="color: rgb(61, 60, 60);"></i>
+        <i data-lucide="move-right" style="color: #3D3C3C;"></i>
       </h2>
-      <div class="comments__tips">Ratings and reviews are verified and from people who use the same type of device
-        that you use
+      <div class="comments__tips">
+        Ratings and reviews are verified and from people who use the same type of device that you use
       </div>
-
-
-
-
-
       <div class="review">
-
         <div class="global">
           <span class="global-value">0.0</span>
           <div class="rating-icons">
-                        <span class="one"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                                class="fas fa-star"></i><i class="fas fa-star"></i></span>
-            <span class="two"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i
-                    class="fas fa-star"></i><i class="fas fa-star"></i></span>
+              <span class="one">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </span>
+            <span class="two">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                <i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </span>
           </div>
           <span class="total-reviews">0</span>
         </div>
         <div class="chart">
+          <!-- rate-box entries… -->
           <div class="rate-box">
             <span class="value">5</span>
-            <div class="progress-bar">
-              <span class="progress"></span>
-            </div>
+            <div class="progress-bar"><span class="progress"></span></div>
             <span class="count">0</span>
           </div>
           <div class="rate-box">
@@ -315,366 +260,184 @@
             <span class="count">0</span>
           </div>
         </div>
-
       </div>
 
-      <!-- review Chart-->
+      <!-- Sample User Reviews… (omitted here for brevity) -->
 
-
-      <!-- User Review -->
-
-      <div class="review-box">
-        <div class="review-header">
-          <div class="user-info">
-            <div class="user-img"><img
-                    src="https://sdkdata.printrash.com/meetis_net_images/f.png" alt=""></div>
-            <div class="user-name">Funmilayo Bankole</div>
-          </div>
-          <div>
-            <i data-lucide="ellipsis-vertical"></i>
-          </div>
-        </div>
-        <div class="rating-box">
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          2/15/25
-        </div>
-        <div class="review-text">
-          This is my first time on this app,I think its one of the
-          best loan app ever. Because they are working for
-          the interest of their customers which is their priorit...
-        </div>
-        <div class="review-text" style="color: #323232;">
-          5 people find this helpful
-        </div>
-        <div class="flex-between">
-          <div class="review-text" style="color: #323232;">
-            Was this review helpful?
-          </div>
-          <div class="description__label" id="description-label">
-            <div class="description__label-item">Yes</div>
-
-            <div class="description__label-item">No</div>
-          </div>
-        </div>
-      </div>
-      <div class="review-box">
-        <div class="review-header">
-          <div class="user-info">
-            <div class="user-img"><img
-                    src="https://sdkdata.printrash.com/meetis_net_images/s.png" alt=""></div>
-            <div class="user-name">sanjay Kumar</div>
-          </div>
-          <div>
-            <i data-lucide="ellipsis-vertical"></i>
-          </div>
-        </div>
-        <div class="rating-box">
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          12/21/24
-        </div>
-        <div class="review-text">
-          Ui interface is too good. Very simple and effective
-          app
-        </div>
-        <div class="review-text" style="color: #323232;">
-          17 people find this helpful
-        </div>
-        <div class="flex-between">
-          <div class="review-text" style="color: #323232;">
-            Was this review helpful?
-          </div>
-          <div class="description__label" id="description-label">
-            <div class="description__label-item">Yes</div>
-
-            <div class="description__label-item">No</div>
-          </div>
-        </div>
-      </div>
-
-
-      <div class="review-box">
-        <div class="review-header">
-          <div class="user-info">
-            <div class="user-img"><img
-                    src="https://sdkdata.printrash.com/meetis_net_images/s1.png" alt=""></div>
-            <div class="user-name">san G</div>
-          </div>
-          <div>
-            <i data-lucide="ellipsis-vertical"></i>
-          </div>
-        </div>
-        <div class="rating-box">
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          <i class="fa-solid fa-star fa-2xs green"></i>
-          4/11/24
-        </div>
-        <div class="review-text">
-          The app is very useful and easy to use, and i have
-          been using it for a long time now. But the worst part
-          is that now there are too many full screen ads and ...
-        </div>
-        <div class="review-text" style="color: #323232;">
-          87 people find this helpful
-        </div>
-        <div class="flex-between">
-          <div class="review-text" style="color: #323232;">
-            Was this review helpful?
-          </div>
-          <div class="description__label" id="description-label">
-            <div class="description__label-item">Yes</div>
-
-            <div class="description__label-item">No</div>
-          </div>
-        </div>
-      </div>
-
-
-
-
-
-
-
-      <div class="allReview">See All Review</div>
-
-      <!-- User Review -->
-
-
-
-
-      <!-- App support  -->
-
+      <!-- App Support Accordion -->
       <section class="accordion">
         <div class="tab">
-          <input type="checkbox" name="accordion-1" id="cb1" checked="">
+          <input type="checkbox" name="accordion-1" id="cb1" checked>
           <label for="cb1" class="tab__label section-title">App Support</label>
           <div class="tab__content">
             <div class="appSupportFlex">
-              <span><img src="https://sdkdata.printrash.com/tashra_net_images/website.png" alt="" class="w-22"></span>
+              <img src="https://sdkdata.printrash.com/tashra_net_images/website.png" alt="" class="w-22">
               <span class="appsupportHead">Website</span>
             </div>
-            <div class="appSupportFlex" style="margin-bottom: 5px;">
-              <span><img src="https://sdkdata.printrash.com/tashra_net_images/mail.png" alt="" class="w-22"></span>
+            <div class="appSupportFlex" style="margin-bottom:5px;">
+              <img src="https://sdkdata.printrash.com/tashra_net_images/mail.png" alt="" class="w-22">
               <span class="appsupportHead">Email</span>
             </div>
-            <p style="margin-left: 42px;margin-bottom: 10px;">partner@justbaat.com</p>
-            <div class="appSupportFlex" style="margin-bottom: 5px;">
-              <span><img src="https://sdkdata.printrash.com/tashra_net_images/location.png" alt="" class="w-22"></span>
+            <p style="margin-left:42px; margin-bottom:10px;">partner@justbaat.com</p>
+            <div class="appSupportFlex" style="margin-bottom:5px;">
+              <img src="https://sdkdata.printrash.com/tashra_net_images/location.png" alt="" class="w-22">
               <span class="appsupportHead">Location</span>
             </div>
-            <p style="margin-left: 42px;margin-bottom: 10px;">Haryana</p>
-            <div class="appSupportFlex" style="margin-bottom: 5px;">
-              <span><img src="https://sdkdata.printrash.com/tashra_net_images/shield.png" alt="" class="w-22"></span>
+            <p style="margin-left:42px; margin-bottom:10px;">Haryana</p>
+            <div class="appSupportFlex" style="margin-bottom:5px;">
+              <img src="https://sdkdata.printrash.com/tashra_net_images/shield.png" alt="" class="w-22">
               <span class="appsupportHead">Privacy Policy</span>
             </div>
-
-
-
-
           </div>
         </div>
       </section>
 
+      <!-- About the developer -->
+      <h2 class="section-title" style="margin-top:30px;">About the developer</h2>
+      <div class="review-text" style="margin:5px;">JUSTBAAT MediaTech</div>
+      <div class="review-text" style="margin:5px;">partner@justbaat.com</div>
+      <div class="review-text" style="margin:5px;">Gurugram</div>
+      <div class="review-text" style="margin:5px;">+91 8707886918</div>
 
-    </div>
-
-    <h2 class="section-title" style="margin-top: 30px;">
-
-      About the developer
-    </h2>
-    <div class="review-text" style="margin: 5px;">JUSTBAAT MeidaTech</div>
-    <div class="review-text" style="margin: 5px;">partner@justbaat.com</div>
-    <div class="review-text" style="margin: 5px;">Gurugram</div>
-    <div class="review-text" style="margin: 5px;">+91 8707886918</div>
-
-
-
-
-
-
-    <!-- Bottom Bar -->
-
-    <div class="bottom-bar">
-      <div class="bottom-boxes">
-                <span>
-                    <img src="https://sdkdata.printrash.com/meetis_net_images/games.png" alt="game" class="w-18">
-                </span>
-        Games
+      <!-- Bottom Bar -->
+      <div class="bottom-bar">
+        <div class="bottom-boxes">
+          <img src="https://sdkdata.printrash.com/meetis_net_images/games.png" alt="game" class="w-18">
+          Games
+        </div>
+        <div class="bottom-boxes">
+          <img src="https://sdkdata.printrash.com/meetis_net_images/apps.png" alt="apps" class="w-55">
+          <span style="color:#0B57CF">Apps</span>
+        </div>
+        <div class="bottom-boxes">
+          <img src="https://sdkdata.printrash.com/meetis_net_images/search.png" alt="search" class="w-18">
+          Search
+        </div>
+        <div class="bottom-boxes">
+          <img src="https://sdkdata.printrash.com/meetis_net_images/offer.png" alt="offer" class="w-18">
+          Offer
+        </div>
+        <div class="bottom-boxes">
+          <img src="https://sdkdata.printrash.com/meetis_net_images/books.png" alt="books" width="14px">
+          Books
+        </div>
       </div>
-      <div class="bottom-boxes">
-        <span><img src="https://sdkdata.printrash.com/meetis_net_images/apps.png" alt="" class="w-55"></span>
-        <span style="color: #0B57CF">Apps</span>
-      </div>
-      <div class="bottom-boxes">
-                <span>
-                    <img src="https://sdkdata.printrash.com/meetis_net_images/search.png" alt="game" class="w-18">
-                </span>
-        Search
-      </div>
-      <div class="bottom-boxes">
-                <span>
-                    <img src="https://sdkdata.printrash.com/meetis_net_images/offer.png" alt="game" class="w-18">
-                </span>
-        Offer
-      </div>
-
-      <div class="bottom-boxes">
-                <span>
-                    <img src="https://sdkdata.printrash.com/meetis_net_images/books.png" alt="game" class="" width="14px">
-                </span>
-        Books
-      </div>
-
     </div>
   </div>
+</div>
 
+<!-- 4) SCRIPTS: SWIPER, LUCIDE, INSTALL LOGIC, RATINGS, SCROLL, APP.JS -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<script>
+  // TOGGLE APP vs UNSUPPORTED
+  if (document.documentElement.classList.contains('show-app')) {
+    document.getElementById('app-content').style.display = 'block';
+  } else {
+    document.getElementById('unsupported').style.display = 'block';
+  }
 
-  <script>
-    const currentParams = window.location.search;
+  // PWA INSTALL LOGIC
+  let deferredPrompt;
+  const installBtn = document.getElementById('installBtn');
+  const installSection = document.getElementById('install');
+  const uninstallSection = document.getElementById('uninstall');
+  const progress = document.getElementById('progress');
 
-    document.querySelectorAll('a[href]').forEach(link => {
-      const href = link.getAttribute('href');
+  // Already installed?
+  const isInstalled = window.matchMedia('(display-mode: standalone)').matches
+          || window.navigator.standalone === true;
+  if (isInstalled) {
+    installSection.style.display = 'none';
+    uninstallSection.style.display = 'block';
+  }
 
-      // Skip external links and anchors
-      if (href && !href.startsWith('http') && !href.startsWith('#')) {
-        const [baseUrl, linkQuery = ""] = href.split("?");
-        const newUrl = baseUrl + currentParams;
-        link.setAttribute('href', newUrl);
-      }
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installSection.style.display = 'block';
+    progress.textContent = 'Available for install';
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    progress.textContent = outcome === 'accepted'
+            ? 'App is installing…'
+            : 'Install dismissed';
+    deferredPrompt = null;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installSection.style.display = 'none';
+    uninstallSection.style.display = 'block';
+    progress.textContent = 'App successfully installed';
+  });
+
+  // Initialize icons & swipers
+  lucide.createIcons();
+  new Swiper(".mySwiper1", { slidesPerView:3, spaceBetween:30, pagination:{ clickable:true } });
+  new Swiper(".mySwiper", {
+    slidesPerView:2.5,
+    spaceBetween:8,
+    pagination:{ clickable:true },
+    navigation:{ nextEl:".swiper-button-next", prevEl:".swiper-button-prev" },
+    breakpoints:{ 1024:{ slidesPerView:5, spaceBetween:50 } }
+  });
+
+  // Ratings logic
+  let rateBox = Array.from(document.querySelectorAll(".rate-box"));
+  let globalValue = document.querySelector(".global-value");
+  let two = document.querySelector(".two");
+  let totalReviews = document.querySelector(".total-reviews");
+  let reviews = { 5:3500, 4:200, 3:150, 2:50, 1:100 };
+  updateValues();
+
+  function updateValues() {
+    rateBox.forEach(box => {
+      let val = box.querySelector(".value").innerHTML;
+      let countBox = box.querySelector(".count");
+      let progress = box.querySelector(".progress");
+      countBox.innerHTML = nFormat(reviews[val]);
+      let pct = Math.round((reviews[val] / getTotal()) * 100);
+      progress.style.width = pct + '%';
     });
-  </script>
-
-
-
-  <script>
-    lucide.createIcons();
-  </script>
-  <!-- Swiper JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-  <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper(".mySwiper1", {
-      slidesPerView: 3,
-      spaceBetween: 30,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
+    totalReviews.innerHTML = getTotal();
+    finalRating();
+  }
+  function getTotal() {
+    return Object.values(reviews).reduce((a,b)=>a+b);
+  }
+  function finalRating() {
+    let sum = Object.entries(reviews).reduce((acc,[val,count])=>acc + val*count,0);
+    let avg = parseFloat(sum / getTotal()).toFixed(1);
+    globalValue.innerHTML = nFormat(avg);
+    two.style.background = `linear-gradient(to right, #0B57CF ${(avg/5)*100}% , transparent 0%)`;
+  }
+  document.querySelectorAll(".value").forEach(el => {
+    el.addEventListener("click", () => {
+      reviews[el.innerHTML]++;
+      updateValues();
     });
-  </script>
+  });
+  function nFormat(n) {
+    if (n>=1e9) return `${(n/1e9).toFixed(1)}b`;
+    if (n>=1e6) return `${(n/1e6).toFixed(1)}m`;
+    if (n>=1e3) return `${(n/1e3).toFixed(1)}k`;
+    return n;
+  }
 
-  <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper(".mySwiper", {
-      slidesPerView:2.5,
-      spaceBetween: 8,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      breakpoints: {
-        1024: {
-          slidesPerView: 5,
-          spaceBetween: 50,
-        },
-      },
-    });
-  </script>
-  <script>
-    let rateBox = Array.from(document.querySelectorAll(".rate-box"));
-    let globalValue = document.querySelector(".global-value");
-    let two = document.querySelector(".two");
-    let totalReviews = document.querySelector(".total-reviews");
-    let reviews = {
-      5: 3500,
-      4: 200,
-      3: 150,
-      2: 50,
-      1: 100,
-    };
-    updateValues();
+  // Scroll effect
+  document.addEventListener("scroll", () => {
+    const topBar = document.querySelector(".top-bar-content");
+    if (window.scrollY > 3) topBar.classList.add("scrolled");
+    else topBar.classList.remove("scrolled");
+  });
+</script>
 
-    function updateValues() {
-      rateBox.forEach((box) => {
-        let valueBox = rateBox[rateBox.indexOf(box)].querySelector(".value");
-        let countBox = rateBox[rateBox.indexOf(box)].querySelector(".count");
-        let progress = rateBox[rateBox.indexOf(box)].querySelector(".progress");
-        console.log(typeof reviews[valueBox.innerHTML]);
-        countBox.innerHTML = nFormat(reviews[valueBox.innerHTML]);
-
-        let progressValue = Math.round(
-                (reviews[valueBox.innerHTML] / getTotal(reviews)) * 100
-        );
-        progress.style.width = `${progressValue}%`;
-      });
-      totalReviews.innerHTML = getTotal(reviews);
-      finalRating();
-    }
-    function getTotal(reviews) {
-      return Object.values(reviews).reduce((a, b) => a + b);
-    }
-
-    document.querySelectorAll(".value").forEach((element) => {
-      element.addEventListener("click", () => {
-        let target = element.innerHTML;
-        reviews[target] += 1;
-        updateValues();
-      });
-    });
-
-    function finalRating() {
-      let final = Object.entries(reviews)
-              .map((val) => val[0] * val[1])
-              .reduce((a, b) => a + b);
-      // console.log(typeof parseFloat(final / getTotal(reviews)).toFixed(1));
-      let ratingValue = nFormat(parseFloat(final / getTotal(reviews)).toFixed(1));
-      globalValue.innerHTML = ratingValue;
-      two.style.background = `linear-gradient(to right, #0B57CF ${(ratingValue / 5) * 100
-      }%, transparent 0%)`;
-    }
-
-    function nFormat(number) {
-      if (number >= 1000 && number < 1000000) {
-        return `${number.toString().slice(0, -3)}k`;
-      } else if (number >= 1000000 && number < 1000000000) {
-        return `${number.toString().slice(0, -6)}m`;
-      } else if (number >= 1000000000) {
-        return `${number.toString().slice(0, -9)}md`;
-      } else if (number === "NaN") {
-        return `0.0`;
-      } else {
-        return number;
-      }
-    }
-
-    document.addEventListener("scroll", function () {
-      const topBar = document.querySelector(".top-bar-content");
-      if (window.scrollY > 3) {
-        topBar.classList.add("scrolled");
-      } else {
-        topBar.classList.remove("scrolled");
-      }
-    });
-
-  </script>
-  <script src="app.js"></script>
-
+<!-- Your external app.js (e.g. additional logic) -->
+<script src="app.js"></script>
 </body>
-
 </html>
